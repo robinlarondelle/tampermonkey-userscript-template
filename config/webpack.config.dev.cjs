@@ -1,6 +1,5 @@
 const path = require('path')
 const { merge } = require('webpack-merge')
-const LiveReloadPlugin = require('webpack-livereload-plugin')
 const UserScriptMetaDataPlugin = require('userscript-metadata-webpack-plugin')
 
 const metadata = require('./metadata.cjs')
@@ -25,9 +24,6 @@ const cfg = merge(webpackConfig, {
     ignored: /node_modules/,
   },
   plugins: [
-    new LiveReloadPlugin({
-      delay: 500,
-    }),
     new UserScriptMetaDataPlugin({
       metadata,
     }),
