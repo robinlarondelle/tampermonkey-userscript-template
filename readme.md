@@ -2,6 +2,30 @@
 
 Just [use this git repo as a template](https://github.com/Trim21/webpack-userscript-template/generate).
 
+## **How does it work?**
+This project is written in TypeScript, which is compiled to JavaScript. Using WebPack, all TypeScript
+imports are concatinated into one large `.user.js` [UserScript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) file, which is compatible with Tampermonkey. WebPack 
+uses a plugin (`userscript-metadata-webpack-plugin`) to add a UserScript header 
+(`// ==UserScript==`) to the top of the file. WebPack creates two versions in the `./build` folder: 
+`dev.user.js` and `prod.user.js`. The main difference between these files is that the `dev.user.js`
+file references the `prod.user.js` file in the `@require` tag using a `file://..` reference.
+
+The `prod.user.js` file contains all the logic and gets recompiled every time a file is saved. 
+Because Tampermonkey fetches the `prod.user.js` on each page load, the changes are directly visible 
+in the browser after a refresh of the page. Please keep in mind that this only works in 
+**Chrome**. Accessing local files through extensions using `file://..` is 
+[not allowed](https://bugzilla.mozilla.org/show_bug.cgi?id=1266960) in FireFox. Unfortunately, 
+this means that developing this script is only possible using Chrome (or any other browser that
+allows local file access). Alternatives may be setting up a localhost static file server, but this 
+introduces other difficulties. Please consider using Chrome before going this route.
+
+When publishing this script for production, just copy the contents of the `prod.user.js` file to 
+Tampermonkey. The `@require` tag to access local files is not included in the production version, 
+because all the necessary code is included in the production file.
+</br>
+</br>
+<hr>
+
 ## dev
 
 1. Allow Tampermonkey's access to local file URIs [tampermonkey/faq](https://tampermonkey.net/faq.php?ext=dhdg#Q204)
